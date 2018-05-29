@@ -1,0 +1,96 @@
+---
+- name: Remove RabbitMQ Server
+  hosts: all
+  gather_facts: true
+  tags: [rabbit]
+
+  tasks:
+    - name: remove erlang packages
+      hosts: all
+      yum:
+       name: erlang*
+       state: absent
+    # with_items:
+    #    - erlang
+    
+    - name: remove rabbitmq-server packages
+      hosts: all
+      yum:
+       name: rabbitmq-server
+       state: absent
+
+    - name: install socat
+      hosts: all
+      yum:
+        name: socat
+        state: present
+      #with_items:
+      #  - socat
+
+    - name: Install Erlang/RabbitMQ-Server
+      hosts: all
+      command: rpm -i https://github.com/rabbitmq/erlang-rpm/releases/download/v20.1.7/erlang-20.1.7-1.el6.x86_64.rpm
+      state: present
+
+    - name: Install RabbitMQ-Server
+      hosts: all
+      command: rpm -i https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.0/rabbitmq-server-3.7.0-1.el6.noarch.rpm
+      state: present
+
+
+    - name: start rabbitmq server
+      hosts: all
+      service:
+        name: rabbitmq-server
+        state: started
+   
+    - name: start rabbitmq app
+      hosts: app1
+      command: rabbitmqctl start_app
+      register: cluster_master   
+ 
+    -  hosts: app1
+       fetch:
+         src: /var/lib/rabbitmq/.erlang.cookie
+         dest: /tmp/
+         flat: yes
+   
+    - name: copy erlang.cookie to rabbit hosts
+      hosts: all
+      copy: 
+        src: /tmp/.erlang.cookie
+        dest: /var/lib/rabbitmq/
+        owner: rabbitmq
+        group: rabbitmq
+        mode: 0400
+
+    - name: stop rabbitmq server again
+      hosts: all
+      service:
+        name: rabbitmq-server
+        state: stopped
+    
+    - name: start rabbitmq server again
+      hosts: all
+      service:
+        name: rabbitmq-server
+        state: started
+
+    - name: start rabbitmq app
+      #hosts: app2
+      command: rabbitmqctl start_app
+      register: cluster_master
+
+    - name: stop rabbitmq app
+      hosts: app2
+      command: rabbitmqctl stop_app
+      register: cluster_master
+
+    - name: rabbitmq clustering
+      hosts: app2
+      command: rabbitmqctl join_cluster --ram rabbit@app1
+
+    - name: start rabbitmq app
+      hosts: app2
+      command: rabbitmqctl start_app
+      register: cluster_master     

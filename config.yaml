@@ -1,0 +1,27 @@
+---
+- name: configuration and clusturing  RabbitMQ Server
+  hosts: app1server
+  gather_facts: true
+  tags: [rabbit]
+  
+  tasks:
+    - name: rabbitmq_clustering | restarting rabbitmq-server on master
+      service: name=rabbitmq-server state=restarted
+
+   # - name: rabbitmq_clustering | sending sigterm to any running rabbitmq processes
+   #   shell: pkill -u rabbitmq || true
+
+    - name: stop rabbitmq app
+      command: rabbitmqctl stop_app
+      register: cluster_master
+    
+    - name: rabbitmq_clustering | resetting rabbitmq app
+      command: rabbitmqctl reset
+    
+    - name: rabbitmq clustering
+      command: rabbitmqctl join_cluster --ram rabbit@app2
+
+    - name: start rabbitmq app
+      command: rabbitmqctl start_app
+      register: cluster_master
+ 

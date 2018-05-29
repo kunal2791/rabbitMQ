@@ -1,0 +1,8 @@
+---
+- include: install.yaml
+
+- include: config.yaml 
+
+- include: ha.yaml 
+#- name: configure rabbit
+#  stat: path=/home/ec2-user/test/config.yaml

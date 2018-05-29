@@ -1,0 +1,82 @@
+---
+- name: Remove RabbitMQ Server
+  hosts: all
+  gather_facts: true
+  tags: [rabbit]
+
+  tasks:
+    - name: remove erlang packages
+      yum:
+       name: erlang*
+       state: absent
+    # with_items:
+    #    - erlang
+
+    - name: remove rabbitmq-server packages
+      yum:
+       name: rabbitmq-server
+       state: absent
+
+    - name: removeing erlang files from servers
+      shell: rm -rf /var/lib/rabbitmq
+
+    - name: killing rabbitmq process
+      shell: pkill -u rabbitmq || true
+
+    - name: install socat
+      yum:
+        name: socat
+        state: present
+      #with_items:
+      #  - socat
+
+    - name: Install Erlang/RabbitMQ-Server
+      command: rpm -i https://github.com/rabbitmq/erlang-rpm/releases/download/v20.1.7/erlang-20.1.7-1.el6.x86_64.rpm
+      state: present
+
+    - name: Install RabbitMQ-Server
+      command: rpm -i https://dl.bintray.com/rabbitmq/all/rabbitmq-server/3.7.0/rabbitmq-server-3.7.0-1.el6.noarch.rpm
+      state: present
+
+
+    - name: start rabbitmq server
+      service:
+        name: rabbitmq-server
+        state: started
+     
+    -  hosts: app2
+       fetch:
+         src: /var/lib/rabbitmq/.erlang.cookie
+         dest: /tmp/
+         flat: yes
+
+    
+    - name: start rabbitmq app
+      command: rabbitmqctl start_app
+      register: cluster_master
+
+    - name: rabbitmq_clustering | stopping rabbitmq app
+      command: rabbitmqctl stop_app     
+
+    - name: rabbitmq_clustering | resetting rabbitmq app
+      command: rabbitmqctl reset
+
+    - name: rabbitmq_clustering | stopping rabbitmq-server
+      service: name=rabbitmq-server state=stopped
+
+    - name: copy erlang.cookie to rabbit hosts
+      copy:
+        src: /tmp/.erlang.cookie
+        dest: /var/lib/rabbitmq/
+        owner: rabbitmq
+        group: rabbitmq
+        mode: 0400
+    
+    - name: start rabbitmq server
+      service:
+        name: rabbitmq-server
+        state: started   
+ 
+    - name: start rabbitmq app
+      command: rabbitmqctl start_app
+      register: cluster_master
