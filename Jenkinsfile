@@ -22,7 +22,7 @@ node('master') {
       stage("Check Ansible installation") {
         
 			dir("${ScriptPath}"){
-
+                                sh "ssh -i $key ec2-user@$server"
 				sh "ansible --version"
 				sh "cat /etc/ansible/hosts"
 				}
@@ -31,7 +31,7 @@ node('master') {
 			stage("Check Ansible installation Script") {
         
 			dir("${ScriptPath}"){
-
+                                sh "sh "ssh -i $key ec2-user@$server"
 				sh "ansible-playbook $FILE --check"
 								}
 			}
@@ -39,7 +39,7 @@ node('master') {
 			stage("Installation") {
         
 				dir("${ScriptPath}"){
-				ssh -i $key ec2-user@$server
+				sh "ssh -i $key ec2-user@$server"
 				sh "ansible-playbook $FILE -s -v"
 				
 				}
