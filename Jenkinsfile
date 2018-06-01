@@ -31,7 +31,7 @@ node('master') {
 			stage("Check Ansible installation Script") {
         
 			dir("${ScriptPath}"){
-                                sh "sh "ssh -i $key ec2-user@$server"
+                                sh "ssh -i $key ec2-user@$server"
 				sh "ansible-playbook $FILE --check"
 								}
 			}
