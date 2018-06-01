@@ -1,9 +1,11 @@
-node('base') {
+node('master') {
 
 	  def Repository = "kunal2791/rabbitMQ"
 		def Job = "rabbitMQ"
 		def ScriptPath = "ansible"
 		def FILE = "main.yaml"
+	        def key = "/tmp/demo-system-manager.pem"
+	        def server = "35.177.175.185"
 
 
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
@@ -37,6 +39,7 @@ node('base') {
 			stage("Installation") {
         
 				dir("${ScriptPath}"){
+				ssh -i $key ec2-user@$server
 				sh "ansible-playbook $FILE -s -v"
 				
 				}
