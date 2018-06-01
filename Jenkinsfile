@@ -1,17 +1,9 @@
 node('base') {
 
-                  def Repository = "kunal2791/rabbitMQ"
-#                             def Registry = "dtr.aa.st"
-#                             def Directory = "main/target"
-#                             def Image = "${Registry}/${Repository}"
-                               def Job = "rabbitMQ"
-                               def ScriptPath = "ansible"
-                               def FILE = "main.yaml"
-#               def Cluster1 = "${ScriptPath}/modules/cluster1/task-definition/${Job}.json"
-#                             def Cluster2 = "${ScriptPath}/modules/cluster2/task-definition/${Job}.json"
-
-
-#                             def dockerImage
+	  def Repository = "kunal2791/rabbitMQ"
+		def Job = "rabbitMQ"
+		def ScriptPath = "ansible"
+		def FILE = "main.yaml"
 
 
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
@@ -19,43 +11,46 @@ node('base') {
                   gitLabConnection('https://github.com/kunal2791/rabbitMQ.git'), [$class: 'GitlabLogoProperty', repositoryName: '${RepositoryName}'], pipelineTriggers([])])
 
 
+	     stage("Checkout") {
 
-                        stage("Checkout") {
+		 		checkout scm
 
-                                                 
-                                                              checkout scm
-                                              }              
-            stage("Check Ansible installation") {
-                                               dir("${ScriptPath}"){
+      }	
+      
+      stage("Check Ansible installation") {
+        
+			dir("${ScriptPath}"){
 
-                                                               sh "ansible --version"
-                                                               sh "cat /etc/ansible/hosts"
-                                                               }
-                                               }
+				sh "ansible --version"
+				sh "cat /etc/ansible/hosts"
+				}
+			}
 
-                                               stage("Check Ansible installation Script") {
-                                               dir("${ScriptPath}"){
+			stage("Check Ansible installation Script") {
+        
+			dir("${ScriptPath}"){
 
-                                                               sh "ansible-playbook $FILE --check"
-                                                                                                                             }
-                                               }
+				sh "ansible-playbook $FILE --check"
+								}
+			}
 
-                                               stage("Installation") {
-                                                               dir("${ScriptPath}"){
-                                                               sh "ansible-playbook $FILE -s -v"
-                                                               
-                                                               }
-                                               }
+			stage("Installation") {
+        
+				dir("${ScriptPath}"){
+				sh "ansible-playbook $FILE -s -v"
+				
+				}
+			}
 
-                                                 stage("Wipe Out DIR") {
+			  stage("Wipe Out DIR") {
 
              deleteDir()
       }
 
-            stage("Post Action") {
+        stage("Post Action") {
 
-                                                   notifyBuild(currentBuild.result)
-                   }
+			    notifyBuild(currentBuild.result)
+     	 }
 }
 
 def notifyBuild(String buildStatus = 'STARTED') {
@@ -93,7 +88,3 @@ def notifyBuild(String buildStatus = 'STARTED') {
             attachLog: attachLog
     )
 }
-Regards,
-Ashish
-Shared Technologies Gurgaon
-+917838387124
