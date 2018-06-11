@@ -25,8 +25,8 @@ node('master') {
 
                                                                
                                                                
-                                                               sh "ssh demojump "bash -c 'ansible --version'"
-                                                               sh "ssh demojump "bash -c 'cat /etc/ansible/hosts'"
+                                                               sh "ssh demojump "bash -c 'ansible --version'""
+                                                               sh "ssh demojump "bash -c 'cat /etc/ansible/hosts'""
                                                                }
                                                }
 
