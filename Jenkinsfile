@@ -34,16 +34,16 @@ node('master') {
                                                stage("Check Ansible installation Script") {
                                                dir("${ScriptPath}"){
 
-                                                               sh 'ssh ec2-user@demojump "ansible-playbook main.yaml --check"'
+                                                               sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
                                                                                            }
                                                }
 
-                                               stage("Installation") {
-                                                               dir("${ScriptPath}"){
+                                              // stage("Installation") {
+                                                //               dir("${ScriptPath}"){
 																															sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
 
-                                                               }
-                                               }
+                                                  //             }
+                                               //}
 
                                                  stage("Wipe Out DIR") {
 
