@@ -2,7 +2,7 @@ node('master') {
 
 	  def Repository = "kunal2791/rabbitMQ"
 		def Job = "rabbitMQ"
-		def ScriptPath = "ansible"
+		def ScriptPath = "."
 		def FILE = "~/ansible/main.yaml"
 	        //def key = "/tmp/demo-system-manager.pem"
 	        //def server = "35.177.175.185"
