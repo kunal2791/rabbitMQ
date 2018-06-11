@@ -1,6 +1,6 @@
 ---
 - name: configuration and clusturing  RabbitMQ Server
-  hosts: app1server
+  hosts: ram
   gather_facts: true
   tags: [rabbit]
   
