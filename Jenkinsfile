@@ -78,7 +78,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
     } else {
         color = 'RED'
         colorCode = '#FF0000'
-    }
+    } 
 
     // Send notifications
 
