@@ -13,7 +13,6 @@ node('master') {
                   gitLabConnection('https://github.com/kunal2791/rabbitMQ.git'), [$class: 'GitlabLogoProperty', repositoryName: '${RepositoryName}'], pipelineTriggers([])])
 
 
-<<<<<<< HEAD
 
                         stage("Checkout") {
 
