@@ -28,8 +28,10 @@ node('base') {
             stage("Check Ansible installation") {
                                                dir("${ScriptPath}"){
 
-                                                               sh "ansible --version"
-                                                               sh "cat /etc/ansible/hosts"
+                                                               
+                                                               
+                                                               sh "ssh demojump "bash -c 'ansible --version'"
+                                                               sh "ssh demojump "bash -c 'cat /etc/ansible/hosts'"
                                                                }
                                                }
 
@@ -94,6 +96,6 @@ def notifyBuild(String buildStatus = 'STARTED') {
     )
 }
 Regards,
-Ashish
+Kunal Jha
 Shared Technologies Gurgaon
-+917838387124
++919958776257
