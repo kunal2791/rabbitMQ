@@ -24,9 +24,9 @@ node('master') {
 
 
 
-                                                               sh 'ssh demojump "ansible --version"'
-                                                               sh 'ssh demojump "cat /etc/ansible/hosts"'
-                                      
+                                                               sh 'ssh ec2-user@demojump "ansible --version"'
+                                                               sh 'ssh ec2-user@demojump "cat /etc/ansible/hosts"'
+
                                                                }
                                                }
 
