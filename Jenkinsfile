@@ -44,7 +44,6 @@ node('master') {
                                                }
 
                                                  stage("Wipe Out DIR") {
-=======
 	     stage("Checkout") {
 
 		 		checkout scm
@@ -78,7 +77,6 @@ node('master') {
 			}
 
 			  stage("Wipe Out DIR") {
->>>>>>> 835d235a2a10c2efd6ca18bab3756d2d061c0bf7
 
              deleteDir()
       }
@@ -124,10 +122,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
             attachLog: attachLog
     )
 }
-<<<<<<< HEAD
 Regards,
 Kunal Jha
 Shared Technologies Gurgaon
 +919958776257
-=======
->>>>>>> 835d235a2a10c2efd6ca18bab3756d2d061c0bf7
