@@ -23,9 +23,15 @@ node('master') {
                                                dir("${ScriptPath}"){
 
 
+<<<<<<< HEAD
 																								 							sh 'whoami'
                                                                sh 'ssh demojump "bash -c ansible --version"'
                                                                sh 'ssh demojump "bach -c cat /etc/ansible/hosts"'
+=======
+
+                                                               sh 'ssh ec2-user@demojump "bash -c ansible --version"'
+                                                               sh 'ssh ec2-user@demojump "bach -c cat /etc/ansible/hosts"'
+>>>>>>> b7c6dedde56b5d136527f09b164a6be87863b19b
                                                                }
                                                }
 
