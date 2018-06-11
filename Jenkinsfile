@@ -1,17 +1,11 @@
-node('base') {
+node('master') {
 
-                  def Repository = "kunal2791/rabbitMQ"
-#                             def Registry = "dtr.aa.st"
-#                             def Directory = "main/target"
-#                             def Image = "${Registry}/${Repository}"
-                               def Job = "rabbitMQ"
-                               def ScriptPath = "ansible"
-                               def FILE = "main.yaml"
-#               def Cluster1 = "${ScriptPath}/modules/cluster1/task-definition/${Job}.json"
-#                             def Cluster2 = "${ScriptPath}/modules/cluster2/task-definition/${Job}.json"
-
-
-#                             def dockerImage
+	  def Repository = "kunal2791/rabbitMQ"
+		def Job = "rabbitMQ"
+		def ScriptPath = "ansible"
+		def FILE = "main.yaml"
+	        def key = "/tmp/demo-system-manager.pem"
+	        def server = "35.177.175.185"
 
 
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
@@ -19,6 +13,7 @@ node('base') {
                   gitLabConnection('https://github.com/kunal2791/rabbitMQ.git'), [$class: 'GitlabLogoProperty', repositoryName: '${RepositoryName}'], pipelineTriggers([])])
 
 
+<<<<<<< HEAD
 
                         stage("Checkout") {
 
@@ -50,14 +45,49 @@ node('base') {
                                                }
 
                                                  stage("Wipe Out DIR") {
+=======
+	     stage("Checkout") {
+
+		 		checkout scm
+
+      }	
+      
+      stage("Check Ansible installation") {
+        
+			dir("${ScriptPath}"){
+                                sh "ssh -i $key ec2-user@$server"
+				sh "ansible --version"
+				sh "cat /etc/ansible/hosts"
+				}
+			}
+
+			stage("Check Ansible installation Script") {
+        
+			dir("${ScriptPath}"){
+                                sh "ssh -i $key ec2-user@$server"
+				sh "ansible-playbook $FILE --check"
+								}
+			}
+
+			stage("Installation") {
+        
+				dir("${ScriptPath}"){
+				sh "ssh -i $key ec2-user@$server"
+				sh "ansible-playbook $FILE -s -v"
+				
+				}
+			}
+
+			  stage("Wipe Out DIR") {
+>>>>>>> 835d235a2a10c2efd6ca18bab3756d2d061c0bf7
 
              deleteDir()
       }
 
-            stage("Post Action") {
+        stage("Post Action") {
 
-                                                   notifyBuild(currentBuild.result)
-                   }
+			    notifyBuild(currentBuild.result)
+     	 }
 }
 
 def notifyBuild(String buildStatus = 'STARTED') {
@@ -95,7 +125,10 @@ def notifyBuild(String buildStatus = 'STARTED') {
             attachLog: attachLog
     )
 }
+<<<<<<< HEAD
 Regards,
 Kunal Jha
 Shared Technologies Gurgaon
 +919958776257
+=======
+>>>>>>> 835d235a2a10c2efd6ca18bab3756d2d061c0bf7
