@@ -122,7 +122,3 @@ def notifyBuild(String buildStatus = 'STARTED') {
             attachLog: attachLog
     )
 }
-Regards
-Kunal Jha
-Shared Technologies Gurgaon
-+919958776257
