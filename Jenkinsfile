@@ -27,7 +27,7 @@ node('master') {
                                                                sh 'ssh ec2-user@demojump "ansible --version"'
                                                                sh 'ssh ec2-user@demojump "cat /etc/ansible/hosts"'
 																														//	 sh 'ssh ec2-user@demojump "mkdir ansible"'
-																															 sh 'scp -r . ec2-user@demojump:/home/ec2-user/ansible'
+																															 sh 'scp -r `pwd` ec2-user@demojump:/home/ec2-user/ansible'
                                                                }
                                                }
 
