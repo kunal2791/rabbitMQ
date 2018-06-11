@@ -19,7 +19,7 @@
       command: rabbitmqctl reset
     
     - name: rabbitmq clustering | joining cluster
-      command: rabbitmqctl join_cluster --ram rabbit@app2
+      command: rabbitmqctl join_cluster --ram rabbit@master
 
     - name: rabbitmq clustering | start rabbitmq app
       command: rabbitmqctl start_app
