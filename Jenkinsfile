@@ -34,13 +34,13 @@ node('master') {
                                                stage("Check Ansible installation Script") {
                                                dir("${ScriptPath}"){
 
-                                                               sh 'ssh ec2-user@demojump "ansible-playbook $FILE --check"'
+                                                               sh 'ssh ec2-user@demojump "ansible-playbook main.yaml --check"'
                                                                                            }
                                                }
 
                                                stage("Installation") {
                                                                dir("${ScriptPath}"){
-																															sh 'ssh ec2-user@demojump "ansible-playbook $FILE -s -v"'
+																															sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
 
                                                                }
                                                }
