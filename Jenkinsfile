@@ -4,8 +4,8 @@ node('master') {
 		def Job = "rabbitMQ"
 		def ScriptPath = "ansible"
 		def FILE = "main.yaml"
-	        def key = "/tmp/demo-system-manager.pem"
-	        def server = "35.177.175.185"
+	        //def key = "/tmp/demo-system-manager.pem"
+	        //def server = "35.177.175.185"
 
 
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
@@ -16,14 +16,14 @@ node('master') {
 
                         stage("Checkout") {
 
-                                                 
+
                                                               checkout scm
-                                              }              
+                                              }
             stage("Check Ansible installation") {
                                                dir("${ScriptPath}"){
 
-                                                               
-                                                               
+
+
                                                                sh "ssh demojump "bash -c 'ansible --version'""
                                                                sh "ssh demojump "bash -c 'cat /etc/ansible/hosts'""
                                                                }
@@ -33,52 +33,19 @@ node('master') {
                                                dir("${ScriptPath}"){
 
                                                                sh "ansible-playbook $FILE --check"
-                                                                                                                             }
+                                                                                           }
                                                }
 
                                                stage("Installation") {
                                                                dir("${ScriptPath}"){
                                                                sh "ansible-playbook $FILE -s -v"
-                                                               
+
                                                                }
                                                }
 
                                                  stage("Wipe Out DIR") {
-	     stage("Checkout") {
 
-		 		checkout scm
-
-      }	
-      
-      stage("Check Ansible installation") {
-        
-			dir("${ScriptPath}"){
-                                sh "ssh -i $key ec2-user@$server"
-				sh "ansible --version"
-				sh "cat /etc/ansible/hosts"
-				}
-			}
-
-			stage("Check Ansible installation Script") {
-        
-			dir("${ScriptPath}"){
-                                sh "ssh -i $key ec2-user@$server"
-				sh "ansible-playbook $FILE --check"
-								}
-			}
-
-			stage("Installation") {
-        
-				dir("${ScriptPath}"){
-				sh "ssh -i $key ec2-user@$server"
-				sh "ansible-playbook $FILE -s -v"
-				
-				}
-			}
-
-			  stage("Wipe Out DIR") {
-
-             deleteDir()
+           deleteDir()
       }
 
         stage("Post Action") {
