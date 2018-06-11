@@ -1,6 +1,6 @@
 ---
 - name: enable HA-all policy
-  hosts: app1server
+  hosts: disc
   gather_facts: true
   tags: [rabbit]
 
