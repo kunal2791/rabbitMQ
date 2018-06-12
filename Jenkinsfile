@@ -40,7 +40,7 @@ node('master') {
 
                                               // stage("Installation") {
                                                 //               dir("${ScriptPath}"){
-																															sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
+																														//	sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
 
                                                   //             }
                                                //}
