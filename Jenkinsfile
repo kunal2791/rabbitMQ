@@ -4,8 +4,7 @@ node('master') {
 		def Job = "rabbitMQ"
 		def ScriptPath = "."
 		def FILE = "main.yaml"
-	        //def key = "/tmp/demo-system-manager.pem"
-	        //def server = "35.177.175.185"
+	       
 
 
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
