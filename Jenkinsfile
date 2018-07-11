@@ -20,7 +20,7 @@ node('master') {
             sh 'ssh ec2-user@jump "ansible --version"'
             sh 'ssh ec2-user@jump "cat /etc/ansible/hosts"'
             //	 sh 'ssh ec2-user@demojump "mkdir ansible"'
-            sh 'scp -r *.yaml ec2-user@demojump:/home/ec2-user/'
+            sh 'scp -r *.yaml ec2-user@jump:/home/ec2-user/'
         }
     }
 
