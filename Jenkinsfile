@@ -1,58 +1,51 @@
 node('master') {
 
-	  def Repository = "kunal2791/rabbitMQ"
-		def Job = "rabbitMQ"
-		def ScriptPath = "."
-		def FILE = "main.yaml"
-	       
+    def Repository = "kunal2791/rabbitMQ"
+    def Job = "rabbitMQ"
+    def ScriptPath = "."
+    def FILE = "main.yaml"
 
 
-        properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
-                  disableConcurrentBuilds(),
-                  gitLabConnection('https://github.com/kunal2791/rabbitMQ.git'), [$class: 'GitlabLogoProperty', repositoryName: '${RepositoryName}'], pipelineTriggers([])])
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '15')),
+                disableConcurrentBuilds(),
+                gitLabConnection('https://github.com/kunal2791/rabbitMQ.git'), [$class: 'GitlabLogoProperty', repositoryName: '${RepositoryName}'], pipelineTriggers([])])
 
+    stage("Checkout") {
 
+        checkout scm
+    }
+    stage("Check Ansible installation") {
+        dir("${ScriptPath}") {
 
-                        stage("Checkout") {
+            sh 'ssh ec2-user@jump "ansible --version"'
+            sh 'ssh ec2-user@jump "cat /etc/ansible/hosts"'
+            //	 sh 'ssh ec2-user@demojump "mkdir ansible"'
+            sh 'scp -r *.yaml ec2-user@demojump:/home/ec2-user/'
+        }
+    }
 
+    stage("Check Ansible installation Script") {
+        dir("${ScriptPath}") {
 
-                                                              checkout scm
-                                              }
-            stage("Check Ansible installation") {
-                                               dir("${ScriptPath}"){
+            sh 'ssh ec2-user@jump "ansible-playbook main.yaml -s -v"'
+        }
+    }
 
+    // stage("Installation") {
+    //               dir("${ScriptPath}"){
+    //	sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
+    //             }
+    //}
 
+    stage("Wipe Out DIR") {
 
-                                                               sh 'ssh ec2-user@demojump "ansible --version"'
-                                                               sh 'ssh ec2-user@demojump "cat /etc/ansible/hosts"'
-																														//	 sh 'ssh ec2-user@demojump "mkdir ansible"'
-																															 sh 'scp -r *.yaml ec2-user@demojump:/home/ec2-user/'
-                                                               }
-                                               }
+        deleteDir()
+    }
 
-                                               stage("Check Ansible installation Script") {
-                                               dir("${ScriptPath}"){
+    stage("Post Action") {
 
-                                                               sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
-                                                                                           }
-                                               }
-
-                                              // stage("Installation") {
-                                                //               dir("${ScriptPath}"){
-																														//	sh 'ssh ec2-user@demojump "ansible-playbook main.yaml -s -v"'
-
-                                                  //             }
-                                               //}
-
-                                                 stage("Wipe Out DIR") {
-
-           deleteDir()
-      }
-
-        stage("Post Action") {
-
-			    notifyBuild(currentBuild.result)
-     	 }
+        notifyBuild(currentBuild.result)
+    }
 }
 
 def notifyBuild(String buildStatus = 'STARTED') {
@@ -80,9 +73,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
         color = 'RED'
         colorCode = '#FF0000'
     }
-
     // Send notifications
-
     emailext(
             subject: subject,
             body: details,
