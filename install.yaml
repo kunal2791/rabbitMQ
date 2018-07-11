@@ -44,7 +44,7 @@
         name: rabbitmq-server
         state: started
      
-    -  hosts: app2
+    -  hosts: master
        fetch:
          src: /var/lib/rabbitmq/.erlang.cookie
          dest: /tmp/
