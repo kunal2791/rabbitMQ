@@ -1,4 +1,4 @@
-node('testagent') {
+node('master') {
 
     def Repository = "kunal2791/rabbitMQ"
     def Job = "rabbitMQ"
