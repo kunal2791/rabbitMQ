@@ -28,7 +28,7 @@ node('master') {
             def data = sh '$(ssh ec2-user@test "yum -q list installed <PackageName> &>/dev/null && echo "Installed" || echo "Not installed"")'
                                          echo "$data"
     }
-
+    }
 
     stage("Check Ansible installation Script") {
         dir("${ScriptPath}") {
