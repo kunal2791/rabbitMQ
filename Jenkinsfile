@@ -25,7 +25,7 @@ node('master') {
  //   }
     stage("Check Ansible installation") {
         dir("${ScriptPath}") {
-               sh 'ssh ec2-user@jump "yum -q list installed <PackageName> &>/dev/null && echo "Installed" || echo "Not installed""' > fileo           
+               sh 'ssh ec2-user@jump "yum -q list installed <PackageName> &>/dev/null && echo "Installed" || echo "Not installed""' == fileo           
             data = readfile('fileo').trim()
             echo "This is ${data}"
     }
