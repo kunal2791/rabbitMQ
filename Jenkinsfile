@@ -14,15 +14,31 @@ node('master') {
 
         checkout scm
     }
+ //   stage("Check Ansible installation") {
+ //       dir("${ScriptPath}") {
+
+  //          sh 'ssh ec2-user@jump "ansible --version"'
+ //           sh 'ssh ec2-user@jump "cat /etc/ansible/hosts"'
+            //	 sh 'ssh ec2-user@demojump "mkdir ansible"'
+ //           sh 'scp -r *.yaml ec2-user@jump:/home/ec2-user/'
+ //       }
+ //   }
     stage("Check Ansible installation") {
         dir("${ScriptPath}") {
-
-            sh 'ssh ec2-user@jump "ansible --version"'
-            sh 'ssh ec2-user@jump "cat /etc/ansible/hosts"'
-            //	 sh 'ssh ec2-user@demojump "mkdir ansible"'
+            def data = sh '$(ssh ec2-user@test "yum -q list installed <PackageName> &>/dev/null && echo "Installed" || echo "Not installed"")'
+                                           if '${data}' == "Not Installed"{
+                                             sh 'ssh ec2-user@jump "sudo yum install epel-release"'
+                                             sh 'ssh ec2-user@jump "yum install ansible"'
+                                           }
+            else { 
+                                              sh 'ssh ec2-user@jump "ansible --version"'
+                                              }
+                                           sh 'ssh ec2-user@jump "cat /etc/ansible/hosts "'
+            //             sh 'ssh ec2-user@test "mkdir ansible"'
             sh 'scp -r *.yaml ec2-user@jump:/home/ec2-user/'
         }
     }
+
 
     stage("Check Ansible installation Script") {
         dir("${ScriptPath}") {
