@@ -25,7 +25,7 @@ node('master') {
  //   }
     stage("Check Ansible installation") {
         dir("${ScriptPath}") {
-            def data = sh 'echo "installed"|ssh ec2-user@jump'
+            def data = echo "installed" | sh 'ssh ec2-user@jump' 
             echo "This is ${data}"
     }
     }
